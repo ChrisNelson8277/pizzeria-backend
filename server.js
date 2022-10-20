@@ -59,8 +59,8 @@ app.post("/create-checkout-session", async (req, res) => {
       cancel_url: process.env.CLIENT_URL,
     });
 
-    res.json({ url: session.url, orderId: 1 }).then(() => {
-      res.json("test");
+    res.json({ url: session.url, orderId: 1 }).then((res) => {
+      res.json({ test: "test" });
     });
   } catch (e) {
     res.status(500).json({ error: e.message });

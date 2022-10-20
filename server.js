@@ -7,7 +7,10 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://leafy-sunflower-bfe6d3.netlify.app",
+    origin: [
+      "https://leafy-sunflower-bfe6d3.netlify.app",
+      "http://localhost:3000",
+    ],
   })
 );
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);

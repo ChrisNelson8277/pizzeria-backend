@@ -36,33 +36,32 @@ app.post("/create-checkout-session", async (req, res) => {
   const qty = req.body.items[0].qty;
   const items = req.body.items;
   try {
-    const session = await stripe.checkout.sessions
-      .create({
-        payment_method_types: ["card"],
-        mode: "payment",
-        line_items: items.map((item) => {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      mode: "payment",
+      line_items: items.map((item) => {
+        const storeItem = storeItems.get(item.id);
+        function getPrice(id, size) {
           const storeItem = storeItems.get(item.id);
-          function getPrice(id, size) {
-            const storeItem = storeItems.get(item.id);
-          }
-          return {
-            price_data: {
-              currency: "usd",
-              product_data: {
-                name: storeItem.name,
-              },
-              unit_amount: storeItem[item.size],
+        }
+        return {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: storeItem.name,
             },
-            quantity: item.qty,
-          };
-        }),
-        success_url: `${process.env.CLIENT_URL}/success`,
-        cancel_url: process.env.CLIENT_URL,
-      })
-      .then(() => {
-        res.json("test");
-      });
-    res.json({ url: session.url, orderId: 1 });
+            unit_amount: storeItem[item.size],
+          },
+          quantity: item.qty,
+        };
+      }),
+      success_url: `${process.env.CLIENT_URL}/success`,
+      cancel_url: process.env.CLIENT_URL,
+    });
+
+    res.json({ url: session.url, orderId: 1 }).then(() => {
+      res.json("test");
+    });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

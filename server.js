@@ -2,8 +2,11 @@ const express = require("express");
 const dotenv = require("dotenv").config();
 const port = 5000;
 const cors = require("cors");
-const app = express();
+const connectDB = require("./config/db");
+const mongoose = require("mongoose");
 
+const app = express();
+connectDB();
 app.use(express.json());
 app.use(
   cors({
@@ -22,6 +25,11 @@ const storeItems = new Map([
   [3, { small: 1299, medium: 1399, large: 1699, name: "Spicy Pepp Pizza" }],
 ]);
 
+app.get("/db/menuItems", (req, res) => {
+  const menu = require("./controllers/menuController");
+  menu.getMenu(req, res);
+});
+
 app.post("/register", (req, res) => {
   const registerUser = require("./controllers/register");
   registerUser.handleNewUser(req, res);
@@ -31,6 +39,7 @@ app.post("/login", (req, res) => {
   const loginUser = require("./controllers/authController");
   loginUser.handleLogin(req, res);
 });
+app.post("/db/CreateUser", (req, res) => {});
 
 app.post("/create-checkout-session", async (req, res) => {
   const qty = req.body.items[0].qty;

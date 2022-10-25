@@ -6,8 +6,8 @@ const connectDB = require("./config/db");
 const mongoose = require("mongoose");
 
 const app = express();
-connectDB();
 app.use(express.json());
+app.use(connectDB());
 app.use(
   cors({
     origin: [

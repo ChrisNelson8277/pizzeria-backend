@@ -2,11 +2,10 @@ const express = require("express");
 const dotenv = require("dotenv").config();
 const port = 5000;
 const cors = require("cors");
-const connectDB = require("./config/db");
 const mongoose = require("mongoose");
 
 const app = express();
-connectDB();
+
 app.use(express.json());
 app.use(
   cors({
@@ -17,7 +16,7 @@ app.use(
   })
 );
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
-
+connectDB();
 const storeItems = new Map([
   [0, { small: 1299, medium: 1499, large: 1699, name: "Pepperoni Pizza" }],
   [1, { small: 1299, medium: 1499, large: 1699, name: "Cheese Pizza" }],

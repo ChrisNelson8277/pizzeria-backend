@@ -7,7 +7,6 @@ const mongoose = require("mongoose");
 
 const app = express();
 app.use(express.json());
-app.use(connectDB());
 app.use(
   cors({
     origin: [

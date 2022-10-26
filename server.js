@@ -76,11 +76,5 @@ app.post("/create-checkout-session", async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
-client.connect((err) => {
-  if (err) {
-    console.error(err);
-    return false;
-  }
-  // connection to mongo is successful, listen for requests
-  app.listen(port, () => console.log(`Server started on port ${port}`));
-});
+
+app.listen(port, () => console.log(`Server started on port ${port}`));

@@ -29,13 +29,16 @@ app.get("/db/menuItems", (req, res) => {
   const menu = require("./controllers/menuController");
   menu.getMenu(req, res);
 });
+app.post("/db/addMenuItems", (req, res) => {
+  const menu = require("./controllers/menuController");
+  menu.getMenu(req, res);
+});
 
 app.post("/register", (req, res) => {
   const registerUser = require("./controllers/register");
   registerUser.handleNewUser(req, res);
 });
 app.post("/login", (req, res) => {
-  console.log("trigger");
   const loginUser = require("./controllers/authController");
   loginUser.handleLogin(req, res);
 });
@@ -64,7 +67,7 @@ app.post("/create-checkout-session", async (req, res) => {
           quantity: item.qty,
         };
       }),
-      success_url: `${process.env.CLIENT_URL}/success`,
+      success_url: `${process.env.CLIENT_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: process.env.CLIENT_URL,
     });
 
@@ -73,5 +76,11 @@ app.post("/create-checkout-session", async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
-
-app.listen(port, () => console.log(`Server started on port ${port}`));
+client.connect((err) => {
+  if (err) {
+    console.error(err);
+    return false;
+  }
+  // connection to mongo is successful, listen for requests
+  app.listen(port, () => console.log(`Server started on port ${port}`));
+});

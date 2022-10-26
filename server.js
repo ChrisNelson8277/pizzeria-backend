@@ -33,8 +33,8 @@ app.get("/db/menuItems", (req, res) => {
 app.get("/success", async (req, res) => {
   const session = await stripe.checkout.sessions.retrieve(req.query.session_id);
   const customer = await stripe.customers.retrieve(session.customer);
-
-  res.send("is this working");
+  console.log(customer);
+  res.json({ name: customer.name });
 });
 
 app.post("/db/addMenuItems", (req, res) => {

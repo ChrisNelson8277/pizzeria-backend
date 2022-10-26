@@ -29,6 +29,16 @@ app.get("/db/menuItems", (req, res) => {
   const menu = require("./controllers/menuController");
   menu.getMenu(req, res);
 });
+
+app.get("/success", async (req, res) => {
+  const session = await stripe.checkout.sessions.retrieve(req.query.session_id);
+  const customer = await stripe.customers.retrieve(session.customer);
+
+  res.send(
+    `<html><body><h1>Thanks for your order, ${customer.name}!</h1></body></html>`
+  );
+});
+
 app.post("/db/addMenuItems", (req, res) => {
   const menu = require("./controllers/menuController");
   menu.getMenu(req, res);

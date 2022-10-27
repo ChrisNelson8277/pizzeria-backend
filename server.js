@@ -30,14 +30,6 @@ app.get("/db/menuItems", (req, res) => {
   menu.getMenu(req, res);
 });
 
-app.get("/order/success", async (req, res) => {
-  const session = await stripe.checkout.sessions.retrieve(req.query.session_id);
-  console.log(session);
-  const customer = await stripe.customers.retrieve(session.customer);
-  console.log(customer);
-  res.status(200).json({ test: "test" });
-});
-
 app.post("/db/addMenuItems", (req, res) => {
   const menu = require("./controllers/menuController");
   menu.getMenu(req, res);
@@ -84,6 +76,11 @@ app.post("/create-checkout-session", async (req, res) => {
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
+});
+app.post("/order/success", async (req, res) => {
+  const session = await stripe.checkout.sessions.retrieve(req.body.session_id);
+  const handleOrder = require("./controllers/orderController");
+  handleOrder.completeOrder(req, res, session);
 });
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
